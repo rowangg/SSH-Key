@@ -8,7 +8,7 @@ output(){
 
 options() {
     output "What would you like to do?"
-    ouuput "[1] Add Rowan's key."
+    output "[1] Add Rowan's key."
     output "[2] Remove Rowan's key."
     read choice
     case $choice in
