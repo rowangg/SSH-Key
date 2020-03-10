@@ -37,6 +37,8 @@ add_key(){
     output "Ensuring SSH keys permissions..."
     chmod -R go= ~/.ssh
     chown -R $USER:$USER ~/.ssh
+    
+    output "Done"
 }
 
 remove_key(){
