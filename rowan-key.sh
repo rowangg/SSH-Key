@@ -1,58 +1,65 @@
 #!/bin/bash
 
-KEY="ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAxOARK8vInaz82+0W+xBrhVPURG9pZ6XimwKCAM7VG1+qISpb6MhXpEbh8aqTCAShjOGxKEVL03UuQl+GsIBmhbJ7vmfGBLThE2mizIdLW3Zmc+f07NjIrUNME8v5GLTTTdEnJPDGXCZ90HEtYrbxv8aWkYFyTJ0rDtww76WBuCKDtmAtc1fQYy5dd3HtAb1vY9VM+bK3kcdKQmu+bmtVo/v6HWSXCizwvo2FcBQbx4PligyRKppCZItz00pESX61yF7SO6A4JuKrmN9G8mwr5a5RE5a5XLVfpoTke9idcHjlkTuZuI8AXLuxwnyUeGs3UZrAschANKQpno933FbvCQ== RowanGG SSH Key"
+welcome(){
+    echo -e "
+    
+ _____                                     _____ _____ _    _        _  __________     __
+|  __ \                                   / ____/ ____| |  | |      | |/ /  ____\ \   / /
+| |__) |_____      ____ _ _ __  ___ _____| (___| (___ | |__| |______| ' /| |__   \ \_/ / 
+|  _  // _ \ \ /\ / / _  |  _ \/ __|______\____ \____\|  __  |______|  < |  __|   \   /  
+| | \ \ (_) \ V  V / (_| | | | \__ \      ____) |___) | |  | |      | . \| |____   | |   
+|_|  \_\___/ \_/\_/ \__,_|_| |_|___/     |_____/_____/|_|  |_|      |_|\_\______|  |_|   
 
-output(){
-    echo -e '\e[36m'$1'\e[0m';
+    "
+    echo -e "Welcome to my script. This script installs and uninstalls my SSH key"
+    echo -e "You should only run this script when you need to give me access to your server"
+    echo -e "As soon as I am finished working on your server you should uninstall the key"
+    echo -e "THIS SCRIPT EFFECTS ONLY THE LOGGED IN USER"
 }
 
-options() {
-    output "What would you like to do?"
-    output "[1] Add Rowan's key."
-    output "[2] Remove Rowan's key."
-    read choice
-    case $choice in
-        1 ) action=1
-            output "You have selected to install Rowan's key."
-            output ""
-            ;;
-        2 ) action=2
-            output "You have selected to remove Rowan's key."
-            output ""
-            ;;
-        * ) output "You did not enter a valid selection."
-            options
-    esac
+break(){
+    echo -e ""
+    echo -e ""
 }
 
-add_key(){
-    output "Adding Rowan's key"
-    mkdir -p ~/.ssh/
-    echo "" >> ~/.ssh/authorized_keys
-    
-    if [ grep -q ${KEY} ~/.ssh/authorized_keys ]; then
-       output "The key is already added."
-    fi  
-    
-    output "Ensuring SSH keys permissions..."
-    chmod -R go= ~/.ssh
-    chown -R $USER:$USER ~/.ssh
-    
-    output "Done"
+options(){
+    echo -e "Please select from one of the following options"
+    echo -e ""
+    echo -e "1| Install key"
+    echo -e "2| Remove key"
+    read option
 }
 
-remove_key(){
-    if [ grep -q ${KEY} ~/.ssh/authorized_keys ]; then
-       sed -e s/deletethis//g -i ~/.ssh/authorized_keys *
-       output "Done"
+installkey(){
+    cd
+    mkdir -p .ssh
+    if grep -q "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAxOARK8vInaz82+0W+xBrhVPURG9pZ6XimwKCAM7VG1+qISpb6MhXpEbh8aqTCAShjOGxKEVL03UuQl+GsIBmhbJ7vmfGBLThE2mizIdLW3Zmc+f07NjIrUNME8v5GLTTTdEnJPDGXCZ90HEtYrbxv8aWkYFyTJ0rDtww76WBuCKDtmAtc1fQYy5dd3HtAb1vY9VM+bK3kcdKQmu+bmtVo/v6HWSXCizwvo2FcBQbx4PligyRKppCZItz00pESX61yF7SO6A4JuKrmN9G8mwr5a5RE5a5XLVfpoTke9idcHjlkTuZuI8AXLuxwnyUeGs3UZrAschANKQpno933FbvCQ== Rowans Key" ".ssh/authorized_keys" -s ; then
+    echo -e "ERROR: Key is already installed, please contact me if this is not the expected output."
     else 
-        output "No key detected."
+    echo "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAxOARK8vInaz82+0W+xBrhVPURG9pZ6XimwKCAM7VG1+qISpb6MhXpEbh8aqTCAShjOGxKEVL03UuQl+GsIBmhbJ7vmfGBLThE2mizIdLW3Zmc+f07NjIrUNME8v5GLTTTdEnJPDGXCZ90HEtYrbxv8aWkYFyTJ0rDtww76WBuCKDtmAtc1fQYy5dd3HtAb1vY9VM+bK3kcdKQmu+bmtVo/v6HWSXCizwvo2FcBQbx4PligyRKppCZItz00pESX61yF7SO6A4JuKrmN9G8mwr5a5RE5a5XLVfpoTke9idcHjlkTuZuI8AXLuxwnyUeGs3UZrAschANKQpno933FbvCQ== Rowans Key" >> ~/.ssh/authorized_keys
+    echo -e "Key sucessfully installed"
     fi
 }
 
+removekey(){
+    cd
+    mkdir -p .ssh
+    if grep -q "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAxOARK8vInaz82+0W+xBrhVPURG9pZ6XimwKCAM7VG1+qISpb6MhXpEbh8aqTCAShjOGxKEVL03UuQl+GsIBmhbJ7vmfGBLThE2mizIdLW3Zmc+f07NjIrUNME8v5GLTTTdEnJPDGXCZ90HEtYrbxv8aWkYFyTJ0rDtww76WBuCKDtmAtc1fQYy5dd3HtAb1vY9VM+bK3kcdKQmu+bmtVo/v6HWSXCizwvo2FcBQbx4PligyRKppCZItz00pESX61yF7SO6A4JuKrmN9G8mwr5a5RE5a5XLVfpoTke9idcHjlkTuZuI8AXLuxwnyUeGs3UZrAschANKQpno933FbvCQ== Rowans Key" ".ssh/authorized_keys" -s ; then
+    sed -i '/Rowans Key/d' .ssh/authorized_keys
+    echo -e "Key sucessfully removed"
+    else 
+    echo -e "ERROR: Key not installed, please contact me if this is not the expected output."
+    fi
+}
+
+welcome
+break
 options
-if [ action == "1" ]; then
-    add_key
-elif [ action == "2" ]; then
-    remove_key
-fi
+case $option in 
+    1)  installkey
+    ;;
+    2)  removekey
+    ;;
+    *)  echo "Your selection was not valid. Please try again:"
+    options
+esac
